@@ -1,0 +1,22 @@
+{
+  "application": {
+    "title": "Tower Console",
+    "name": "Tower Console UI",
+    "description": "Tower Console UI"
+  },
+  "about": {
+    "displayName": "Tower Console",
+    "imageSrc": "<%= brandingRoot %>/images/masthead-logo.svg",
+    "documentationUrl": ""
+  },
+  "masthead": {
+    "leftBrand": {
+      "src": "<%= brandingRoot %>/images/masthead-logo.svg",
+      "alt": "Tower Console",
+      "height": "40px"
+    },
+    "leftTitle": null,
+    "rightBrand": null,
+    "supportUrl": "https://github.com/tsd-ui/tsd-ui-tower/issues"
+  }
+}
