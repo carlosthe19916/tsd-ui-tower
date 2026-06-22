@@ -32,9 +32,7 @@ The `scripts` workspace contains data pipeline tools. Currently it includes a Gi
 ### Usage
 
 ```bash
-npm run build -w scripts
-
-GITHUB_TOKEN="ghp_..." node scripts/dist/cli.mjs
+GITHUB_TOKEN="ghp_..." npm run review-rot
 ```
 
 By default, config is read from `config/sources.yaml` and output is written to `data.json`. Override with `--config-dir=<path>` and `--output=<path>`.
