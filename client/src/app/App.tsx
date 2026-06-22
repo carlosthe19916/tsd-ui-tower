@@ -1,12 +1,12 @@
 import "./App.css";
 import type React from "react";
 
+import { Outlet } from "react-router-dom";
 import { ThemeProvider, type ThemeMode } from "tsd-ui";
 
 import { useLocalStorage } from "@app/hooks/useStorage";
 
 import { DefaultLayout } from "./layout";
-import HelloWorld from "./pages/HelloWorld";
 
 import "@patternfly/patternfly/patternfly.css";
 import "@patternfly/patternfly/patternfly-addons.css";
@@ -22,7 +22,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider mode={mode} setMode={setMode}>
       <DefaultLayout>
-        <HelloWorld />
+        <Outlet />
       </DefaultLayout>
     </ThemeProvider>
   );
