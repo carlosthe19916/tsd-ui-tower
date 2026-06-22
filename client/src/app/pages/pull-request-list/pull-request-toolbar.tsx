@@ -14,7 +14,9 @@ import {
   ToggleGroupItem,
 } from "@patternfly/react-core";
 
+import { SimplePagination } from "@app/components/SimplePagination";
 import { PR_TYPE_FILTERS } from "@app/Constants";
+
 import { PullRequestListContext } from "./pull-request-context";
 
 const TYPE_LABELS: Record<string, string> = {
@@ -36,6 +38,7 @@ export const PullRequestToolbar: React.FC = () => {
     setReadyForReview,
     uniqueAuthors,
     uniqueRepos,
+    paginationProps,
   } = use(PullRequestListContext);
 
   const [isAuthorOpen, setIsAuthorOpen] = useState(false);
@@ -129,6 +132,14 @@ export const PullRequestToolbar: React.FC = () => {
               ))}
             </SelectList>
           </Select>
+        </ToolbarItem>
+
+        <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
+          <SimplePagination
+            idPrefix="pr-table"
+            isTop
+            paginationProps={paginationProps}
+          />
         </ToolbarItem>
       </ToolbarContent>
     </Toolbar>

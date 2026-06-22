@@ -10,9 +10,9 @@ import {
 import { PullRequestListContext } from "./pull-request-context";
 
 export const PullRequestSummary: React.FC = () => {
-  const { filteredPullRequests, averageAgeDays } = use(PullRequestListContext);
+  const { totalFilteredCount, averageAgeDays } = use(PullRequestListContext);
 
-  const count = filteredPullRequests.length;
+  const count = totalFilteredCount;
 
   const formatAge = (days: number): string => {
     if (days === 0) return "—";

@@ -2,7 +2,9 @@ import React, { useMemo } from "react";
 
 import { useFetchPullRequests } from "@app/queries/pull-requests";
 import { usePRFilters, useDerivedFilterOptions } from "@app/hooks/usePRFilters";
+import { usePRPagination } from "@app/hooks/usePRPagination";
 import { usePRSort } from "@app/hooks/usePRSort";
+
 import { PullRequestListContext } from "./pull-request-context";
 
 interface PullRequestProviderProps {
@@ -39,6 +41,15 @@ export const PullRequestProvider: React.FC<PullRequestProviderProps> = ({
     [allPullRequests, filterPRs, sortPRs],
   );
 
+  const { page, perPage, paginationProps } = usePRPagination(
+    filteredPullRequests.length,
+  );
+
+  const currentPageItems = useMemo(() => {
+    const start = (page - 1) * perPage;
+    return filteredPullRequests.slice(start, start + perPage);
+  }, [filteredPullRequests, page, perPage]);
+
   const averageAgeDays = useMemo(() => {
     if (filteredPullRequests.length === 0) return 0;
     const now = Date.now();
@@ -69,6 +80,9 @@ export const PullRequestProvider: React.FC<PullRequestProviderProps> = ({
         sortDirection,
         onSort,
         getSortParams,
+        currentPageItems,
+        totalFilteredCount: filteredPullRequests.length,
+        paginationProps,
         uniqueAuthors,
         uniqueRepos,
         averageAgeDays,

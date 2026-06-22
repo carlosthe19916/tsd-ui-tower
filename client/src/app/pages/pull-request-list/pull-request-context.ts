@@ -1,6 +1,7 @@
 import React from "react";
 
 import type { PullRequest } from "@app/api/models";
+import type { PaginationStateProps } from "@app/components/SimplePagination";
 import type { PRTypeFilter } from "@app/Constants";
 import type { SortableColumn, SortDirection } from "@app/hooks/usePRSort";
 
@@ -32,6 +33,10 @@ export interface IPullRequestListContext {
     onSort: () => void;
     columnIndex: number;
   };
+
+  currentPageItems: PullRequest[];
+  totalFilteredCount: number;
+  paginationProps: PaginationStateProps;
 
   uniqueAuthors: string[];
   uniqueRepos: string[];
