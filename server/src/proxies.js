@@ -1,6 +1,5 @@
 import { CONSOLE_ENV } from "@tsd-ui-tower/common";
 
-/** @type Logger */
 const logger =
   process.env.DEBUG === "1"
     ? console
@@ -10,7 +9,7 @@ const logger =
         error: console.error,
       };
 
-export default {
+export const proxyMap = {
   api: {
     pathFilter: "/api",
     target: CONSOLE_ENV.API_URL ?? "http://localhost:8080",

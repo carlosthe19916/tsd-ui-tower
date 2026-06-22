@@ -5,20 +5,17 @@ import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import reactRefresh from "eslint-plugin-react-refresh";
-import prettierRecommended from "eslint-plugin-prettier/recommended";
 import pluginQuery from "@tanstack/eslint-plugin-query";
 
 export default defineConfig([
   globalIgnores(["**/dist", "**/coverage"]),
   {
-    files: ["**/*.{ts,tsx}"],
+    files: ["**/*.ts", "**/*.tsx"],
     extends: [
       eslintJs.configs.recommended,
-      tseslint.configs.recommendedTypeChecked,
-      tseslint.configs.stylisticTypeChecked,
-      prettierRecommended,
-      eslintReact.configs["recommended-type-checked"],
-      ...pluginQuery.configs["flat/recommended"],
+      tseslint.configs.recommended,
+      eslintReact.configs["recommended-typescript"],
+      ...pluginQuery.configs["flat/recommended-strict"],
       reactRefresh.configs.vite,
     ],
     languageOptions: {
@@ -29,28 +26,7 @@ export default defineConfig([
         tsconfigRootDir: import.meta.dirname,
       },
     },
-    rules: {
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        {
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
-          caughtErrorsIgnorePattern: "^_",
-        },
-      ],
-      "@typescript-eslint/no-empty-function": ["off"],
-      "@typescript-eslint/no-unsafe-assignment": ["warn"],
-      "prettier/prettier": [
-        "warn",
-        {
-          singleQuote: false,
-        },
-      ],
-    },
+    rules: {},
     ignores: ["client/types/**"],
   },
 ]);

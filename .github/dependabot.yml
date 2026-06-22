@@ -5,24 +5,20 @@ updates:
     schedule:
       interval: "monthly"
     commit-message:
-      prefix: ":ghost: "
+      prefix: "ci: "
 
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "monthly"
     commit-message:
-      prefix: ":ghost: "
+      prefix: "chore(deps): "
 
     allow:
       - dependency-type: direct
 
     ignore:
       - dependency-name: "@patternfly/*"
-        update-types: [ "version-update:semver-major" ]
-      - dependency-name: "eslint"
-        update-types: [ "version-update:semver-major" ]
-      - dependency-name: "@eslint/js"
         update-types: [ "version-update:semver-major" ]
 
     groups:
@@ -44,15 +40,18 @@ updates:
           - "rollup"
           - "rollup-*"
 
-      linting:
+      linting-formatting:
         patterns:
-          - "@eslint/*"
           - "eslint"
           - "eslint-*"
+          - "@eslint-*"
+          - "@eslint/*"
+          - "*-eslint"
           - "prettier"
 
       tools:
         patterns:
-           - "@vitejs/*"
-           - "vite"
-           - "vite-*"
+          - "vite"
+          - "vite-*"
+          - "vitest"
+          - "@vitest/*"

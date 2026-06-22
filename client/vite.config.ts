@@ -7,13 +7,14 @@ import path from "path";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { ViteEjsPlugin } from "vite-plugin-ejs";
+import istanbul from "vite-plugin-istanbul";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
 import {
-  brandingStrings,
-  CONSOLE_ENV,
-  encodeEnv,
   SERVER_ENV_KEYS,
+  CONSOLE_ENV,
+  brandingStrings,
+  encodeEnv,
 } from "@tsd-ui-tower/common";
 
 const require = createRequire(import.meta.url);
@@ -26,11 +27,21 @@ const brandingPath: string = brandingAssetPath();
 const manifestPath = path.resolve(brandingPath, "manifest.json");
 const faviconPath = path.resolve(brandingPath, "favicon.svg");
 
-// https://vite.dev/config/
 export default defineConfig({
-  base: process.env.BASE_URL,
   plugins: [
     react(),
+    ...(process.env.COVERAGE === "true"
+      ? [
+          istanbul({
+            include: "src/*",
+            exclude: ["node_modules", "test/"],
+            extension: [".js", ".jsx", ".ts", ".tsx"],
+            requireEnv: false,
+            checkProd: false,
+            forceBuildInstrument: true,
+          }),
+        ]
+      : []),
     {
       name: "ignore-process-env",
       transform(code) {
@@ -39,29 +50,12 @@ export default defineConfig({
     },
     viteStaticCopy({
       targets: [
-        {
-          src: manifestPath,
-          dest: ".",
-        },
-        {
-          src: brandingPath,
-          dest: ".",
-        },
-        {
-          src: faviconPath,
-          dest: ".",
-        },
+        { src: manifestPath, dest: ".", rename: { stripBase: true } },
+        { src: faviconPath, dest: ".", rename: { stripBase: true } },
+        { src: brandingPath, dest: ".", rename: { stripBase: 2 } },
       ],
     }),
-    ...(process.env.TEMPLATE_ENGINE === "on"
-      ? []
-      : [
-          ViteEjsPlugin({
-            _env: encodeEnv(CONSOLE_ENV, SERVER_ENV_KEYS),
-            branding: brandingStrings,
-          }),
-        ]),
-    ...(process.env.TEMPLATE_ENGINE === "on"
+    ...(process.env.NODE_ENV === "production"
       ? [
           {
             name: "copy-index",
@@ -76,7 +70,12 @@ export default defineConfig({
             },
           },
         ]
-      : []),
+      : [
+          ViteEjsPlugin({
+            _env: encodeEnv(CONSOLE_ENV, SERVER_ENV_KEYS),
+            branding: brandingStrings,
+          }),
+        ]),
   ],
   resolve: {
     alias: {

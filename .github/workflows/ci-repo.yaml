@@ -1,31 +1,35 @@
-name: CI
+name: CI (repo level)
 
 on:
   push:
     branches:
       - "main"
+      - "release/*"
   pull_request:
     branches:
       - "main"
-      - "main"
+      - "release/*"
   workflow_dispatch:
   workflow_call:
+  merge_group:
 
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --verbose --ignore-scripts --no-audit
       - name: Build
         run: npm run build
-      - name: Lint sources
+      - name: Test
+        run: npm run test -- --coverage
+      - name: Lint
         run: npm run lint
-      - name: Check
+      - name: Format
         run: npm run format

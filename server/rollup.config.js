@@ -1,5 +1,3 @@
-/* global node*/
-
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import nodeResolve from "@rollup/plugin-node-resolve";
@@ -11,7 +9,7 @@ const buildAndRun = process.env?.ROLLUP_RUN === "true";
 export default {
   strictDeprecations: true,
 
-  input: "src/index.js",
+  input: "src/index.ts",
   output: {
     file: "dist/index.js",
     format: "esm",

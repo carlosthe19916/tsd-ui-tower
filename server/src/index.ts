@@ -1,5 +1,3 @@
-/* global process */
-
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -14,21 +12,23 @@ import {
   brandingStrings,
   encodeEnv,
 } from "@tsd-ui-tower/common";
-import proxies from "./proxies";
+import { proxyMap } from "./proxies";
 
 const debugMode = process.env.DEBUG === "1";
-debugMode && console.log("CONSOLE_ENV", CONSOLE_ENV);
+if (debugMode) console.log("CONSOLE_ENV", CONSOLE_ENV);
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const pathToClientDist = path.join(__dirname, "../../client/dist");
 
-const port = parseInt(CONSOLE_ENV.PORT, 10) || 8080;
+const port = CONSOLE_ENV.PORT ? Number.parseInt(CONSOLE_ENV.PORT, 10) : 8080;
 
 const app = express();
 app.set("x-powered-by", false);
 
 // Setup proxy handling
-app.use(createProxyMiddleware(proxies.api));
+for (const proxyPath in proxyMap) {
+  app.use(createProxyMiddleware(proxyMap[proxyPath]));
+}
 
 app.engine("ejs", ejs.renderFile);
 app.use(express.json());
