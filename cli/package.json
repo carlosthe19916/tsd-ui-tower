@@ -1,0 +1,15 @@
+{
+  "name": "@tsd-ui-tower/cli",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "clean:all": "rimraf ./dist ./node_modules",
+    "lint": "eslint --max-warnings 0 .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --check --ignore-path ../.prettierignore './src/**/*.{ts,tsx,js,json}'",
+    "format:fix": "prettier --write --ignore-path ../.prettierignore './src/**/*.{ts,tsx,js,json}'"
+  }
+}

@@ -33,6 +33,7 @@
   "workspaces": [
     "common",
     "scripts",
+    "cli",
     "client",
     "server"
   ],

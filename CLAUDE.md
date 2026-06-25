@@ -53,9 +53,9 @@ npm run coverage -w client # Coverage report (v8 provider)
 ```
 package.json            # workspace root
 common/                 # shared ESM module (branding, environment config)
-scripts/                # shared logic for pulling data from git providers
 client/                 # React SPA
-cli/                 # React SPA
+cli/                    # CLI - generates similar info as the browser but in the terminal
+scripts/                # shared logic for the "client" and the "cli"
 server/                 # Express.js production server (proxying, env injection)
 e2e/                    # Playwright end-to-end tests
 ```
@@ -95,6 +95,12 @@ api/                    # custom REST calls
 - `React.FC<Props>` for typed components; functional components only
 - Barrel exports via `index.ts` files for layout, components
 - PascalCase for components/types, camelCase with `use` prefix for hooks, UPPER_SNAKE_CASE for constants
+
+## UI Client Style
+
+- Avoid using custom html "style" attributes as well as .css files. Use them only as a last resource
+- Use Patternfly Components to create components
+- Use Patternfly Layout system for organizing positions
 
 ## Testing
 
