@@ -14,7 +14,7 @@
     "format:fix": "prettier --write --ignore-path ../.prettierignore './src/**/*.{ts,tsx,js,json}'",
     "start:dev": "vite --port 3000 --host",
     "start": "vite preview",
-    "test": "vitest --run",
+    "test": "vitest --run --passWithNoTests",
     "coverage": "vitest run --coverage",
     "preview": "vite preview"
   },
