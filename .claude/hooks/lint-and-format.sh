@@ -51,10 +51,17 @@ case "$FILE_PATH" in
 esac
 
 # Run TypeScript type checking on the specific workspace
-if [[ -n "$WORKSPACE" && -f "$WORKSPACE/tsconfig.json" ]]; then
-  echo "🔍 Type checking $WORKSPACE workspace..." >&2
-  if ! npx tsc --noEmit --project "$WORKSPACE/tsconfig.json" 2>&1; then
-    echo "⚠️  Type errors found in $WORKSPACE workspace" >&2
+if [[ -n "$WORKSPACE" ]]; then
+  TSCONFIG="$WORKSPACE/tsconfig.json"
+  # client uses project references; tsconfig.app.json has the actual source files
+  if [[ "$WORKSPACE" == "client" && -f "$WORKSPACE/tsconfig.app.json" ]]; then
+    TSCONFIG="$WORKSPACE/tsconfig.app.json"
+  fi
+  if [[ -f "$TSCONFIG" ]]; then
+    echo "🔍 Type checking $WORKSPACE workspace..." >&2
+    if ! npx tsc --noEmit --project "$TSCONFIG" 2>&1; then
+      echo "⚠️  Type errors found in $WORKSPACE workspace" >&2
+    fi
   fi
 fi
 

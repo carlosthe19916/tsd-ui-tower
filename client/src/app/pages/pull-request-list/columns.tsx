@@ -6,7 +6,7 @@ import {
   Label,
   Tooltip,
 } from "@patternfly/react-core";
-import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import EyeIcon from "@patternfly/react-icons/dist/esm/icons/eye-icon";
 
 import type { PullRequest } from "@app/api/models";
@@ -18,8 +18,7 @@ import { extractSize } from "@app/utils/pr-utils";
 
 const columnHelper = createColumnHelper<PullRequest>();
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const columns: ColumnDef<PullRequest, any>[] = [
+export const columns = [
   columnHelper.display({
     id: "pr",
     header: "PR",
