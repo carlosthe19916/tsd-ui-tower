@@ -24,7 +24,6 @@ export const PullRequestSummary: React.FC = () => {
     <Flex
       spaceItems={{ default: "spaceItemsLg" }}
       alignItems={{ default: "alignItemsCenter" }}
-      style={{ marginBottom: "var(--pf-t--global--spacer--md)" }}
     >
       <FlexItem>
         <Content component={ContentVariants.p}>

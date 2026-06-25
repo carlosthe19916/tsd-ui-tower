@@ -46,6 +46,47 @@ npm run coverage -w client # Coverage report (v8 provider)
 
 **Key environment variables:** `API_URL` (proxy target), `PORT` (server port, default 8080), `TEMPLATE_ENGINE` (set "on" for SSR), `BRANDING` (branding assets path), `BASE_URL` (Vite base path).
 
+## File Organization
+
+### Monorepo structure
+
+```
+package.json            # workspace root
+common/                 # shared ESM module (branding, environment config)
+scripts/                # shared logic for pulling data from git providers
+client/                 # React SPA
+cli/                 # React SPA
+server/                 # Express.js production server (proxying, env injection)
+e2e/                    # Playwright end-to-end tests
+```
+
+### Client structure (`client/src/app/`)
+
+```
+Routes.tsx              # route definitions with lazy() imports
+Constants.ts            # app-wide constants
+env.ts                  # environment config
+dayjs.ts                # dayjs setup
+
+pages/                  # page components, one directory per page
+  <domain>/        # list page for a domain
+    index.ts            # re-export: `export { Component as default } from "./component"`
+    helpers.ts          # page-specific helpers
+    components/         # page-specific sub-components
+    hooks/              # page-specific sub-hooks
+
+queries/                # TanStack Query hooks, one file per domain
+  ...
+
+components/             # shared UI components
+  ...
+
+hooks/                  # shared hooks
+  ...
+
+api/                    # custom REST calls
+```
+
 ## Code Style
 
 - Double quotes (Prettier `singleQuote: false`), semicolons required, 2-space indent

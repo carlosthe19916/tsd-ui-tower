@@ -1,16 +1,18 @@
 import React from "react";
 
+import type { Table } from "@tanstack/react-table";
+
 import type { PullRequest } from "@app/api/models";
 import type { PaginationStateProps } from "@app/components/SimplePagination";
 import type { PRTypeFilter } from "@app/Constants";
-import type { SortableColumn, SortDirection } from "@app/hooks/usePRSort";
 
 export interface IPullRequestListContext {
-  allPullRequests: PullRequest[];
-  filteredPullRequests: PullRequest[];
+  table: Table<PullRequest>;
+  paginationProps: PaginationStateProps;
   generatedAt: string;
   isFetching: boolean;
   fetchError: Error | null;
+  totalFilteredCount: number;
 
   typeFilter: PRTypeFilter;
   setTypeFilter: (value: string) => void;
@@ -20,23 +22,6 @@ export interface IPullRequestListContext {
   setRepoFilter: (value: string) => void;
   readyForReview: boolean;
   setReadyForReview: (value: boolean) => void;
-
-  sortColumn: SortableColumn | "";
-  sortDirection: SortDirection | "";
-  onSort: (column: SortableColumn) => void;
-  getSortParams: (column: SortableColumn) => {
-    sortBy: {
-      index: number;
-      direction: SortDirection | undefined;
-      defaultDirection: "asc";
-    };
-    onSort: () => void;
-    columnIndex: number;
-  };
-
-  currentPageItems: PullRequest[];
-  totalFilteredCount: number;
-  paginationProps: PaginationStateProps;
 
   uniqueAuthors: string[];
   uniqueRepos: string[];

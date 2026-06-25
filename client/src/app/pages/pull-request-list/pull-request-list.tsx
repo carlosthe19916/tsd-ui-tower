@@ -1,6 +1,6 @@
 import type React from "react";
 
-import { Content, PageSection } from "@patternfly/react-core";
+import { Content, PageSection, Stack, StackItem } from "@patternfly/react-core";
 
 import { PullRequestProvider } from "./pull-request-provider";
 import { PullRequestSummary } from "./pull-request-summary";
@@ -18,10 +18,18 @@ export const PullRequestList: React.FC = () => {
       </PageSection>
       <PageSection hasBodyWrapper={false}>
         <PullRequestProvider>
-          <PullRequestSummary />
-          <PullRequestToolbar />
-          <PullRequestTable />
-          <PullRequestFooter />
+          <Stack hasGutter>
+            <StackItem>
+              <PullRequestSummary />
+            </StackItem>
+            <StackItem>
+              <PullRequestToolbar />
+              <PullRequestTable />
+            </StackItem>
+            <StackItem>
+              <PullRequestFooter />
+            </StackItem>
+          </Stack>
         </PullRequestProvider>
       </PageSection>
     </>

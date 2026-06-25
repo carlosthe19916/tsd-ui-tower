@@ -16,10 +16,7 @@ export const PullRequestFooter: React.FC = () => {
   return (
     <Content
       component={ContentVariants.small}
-      style={{
-        marginTop: "var(--pf-t--global--spacer--md)",
-        color: "var(--pf-t--global--text--color--subtle)",
-      }}
+      style={{ color: "var(--pf-t--global--text--color--subtle)" }}
     >
       Last updated: {formatted} (~{relative})
     </Content>

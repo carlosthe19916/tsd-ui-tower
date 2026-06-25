@@ -3,8 +3,8 @@ import type React from "react";
 import { Bullseye, Spinner } from "@patternfly/react-core";
 import { Tbody, Td, Tr } from "@patternfly/react-table";
 
-import { StateError } from "@app/components/StateError";
-import { StateNoData } from "@app/components/StateNoData";
+import { StateError } from "./StateError";
+import { StateNoData } from "./StateNoData";
 
 interface ConditionalTableBodyProps {
   isLoading: boolean;

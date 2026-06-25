@@ -1,6 +1,6 @@
 import type React from "react";
 
-import { Flex, FlexItem } from "@patternfly/react-core";
+import { Avatar, Flex, FlexItem } from "@patternfly/react-core";
 
 import type { Author } from "@app/api/models";
 
@@ -16,12 +16,10 @@ export const AuthorCell: React.FC<AuthorCellProps> = ({ author }) => {
       flexWrap={{ default: "nowrap" }}
     >
       <FlexItem>
-        <img
+        <Avatar
           src={`${author.avatar_url}&s=40`}
           alt={author.login}
-          width={20}
-          height={20}
-          style={{ borderRadius: "50%" }}
+          size="sm"
         />
       </FlexItem>
       <FlexItem>{author.login}</FlexItem>
