@@ -20,10 +20,17 @@ jobs:
         with:
           github-token: ${{ github.token }}
 
+      - name: Get Token
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v4
+        with:
+          application_id: ${{ vars.APPLICATION_BOT_ID }}
+          application_private_key: ${{ secrets.APPLICATION_BOT_KEY }}
+
       - name: Approve PR (patch and minor only)
         if: steps.metadata.outputs.update-type != 'version-update:semver-major'
         env:
-          GH_TOKEN: ${{ secrets.BOT_APPROVE_TOKEN }}
+          GH_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           gh pr review "$PR_NUMBER" --repo "${{ github.repository }}" --approve \
@@ -35,7 +42,7 @@ jobs:
       - name: Enable auto-merge (patch and minor only)
         if: steps.metadata.outputs.update-type != 'version-update:semver-major'
         env:
-          GH_TOKEN: ${{ secrets.BOT_APPROVE_TOKEN }}
+          GH_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           gh pr merge "$PR_NUMBER" --repo "${{ github.repository }}" --auto
