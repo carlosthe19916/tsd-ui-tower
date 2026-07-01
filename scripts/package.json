@@ -28,7 +28,7 @@
     "build": "cross-env NODE_ENV=production rollup -c"
   },
   "dependencies": {
-    "@octokit/graphql": "^8.2.2",
+    "@octokit/graphql": "^9.0.3",
     "yaml": "^2.8.0"
   }
 }
