@@ -12,7 +12,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --check --ignore-path ../.prettierignore './src/**/*.{ts,tsx,js,json}'",
     "format:fix": "prettier --write --ignore-path ../.prettierignore './src/**/*.{ts,tsx,js,json}'",
-    "start:dev": "vite --port 3000 --host",
+    "start:dev": "vite --port 3000 --host --no-open",
     "start": "vite preview",
     "test": "vitest --run --passWithNoTests",
     "coverage": "vitest run --coverage",

@@ -1,6 +1,7 @@
 import React, { use, useState } from "react";
 
 import {
+  Button,
   Checkbox,
   MenuToggle,
   Select,
@@ -13,9 +14,11 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@patternfly/react-core";
+import SyncAltIcon from "@patternfly/react-icons/dist/esm/icons/sync-alt-icon";
 
 import { SimplePagination } from "@app/components/SimplePagination";
 import { PR_TYPE_FILTERS } from "@app/Constants";
+import { useRefreshData } from "@app/queries/pull-requests";
 
 import { PullRequestListContext } from "./pull-request-context";
 
@@ -41,12 +44,26 @@ export const PullRequestToolbar: React.FC = () => {
     paginationProps,
   } = use(PullRequestListContext);
 
+  const { mutate: refresh, isPending: isRefreshing } = useRefreshData();
+
   const [isAuthorOpen, setIsAuthorOpen] = useState(false);
   const [isRepoOpen, setIsRepoOpen] = useState(false);
 
   return (
     <Toolbar>
       <ToolbarContent>
+        <ToolbarItem>
+          <Button
+            variant="primary"
+            icon={<SyncAltIcon />}
+            isLoading={isRefreshing}
+            isDisabled={isRefreshing}
+            onClick={() => refresh()}
+          >
+            Refresh
+          </Button>
+        </ToolbarItem>
+
         <ToolbarItem>
           <Checkbox
             id="ready-for-review"

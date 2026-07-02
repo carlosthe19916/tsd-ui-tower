@@ -63,3 +63,10 @@ test_suite_analysis/
 # Conformance reports (template only)
 conformance-report-*.json
 report-site/
+
+# Local config overrides
+config/sources.local.yaml
+
+# Generated data
+config/data/
+client/public/data.json

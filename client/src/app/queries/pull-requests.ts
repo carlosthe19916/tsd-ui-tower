@@ -1,8 +1,12 @@
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
 
 import type { ReviewRotData } from "@app/api/models";
-import { DATA_URL } from "@app/Constants";
 
 export const PullRequestsQueryKey = "pull-requests";
 
@@ -14,10 +18,9 @@ const emptyData: ReviewRotData = {
 export const pullRequestsQueryOptions = queryOptions({
   queryKey: [PullRequestsQueryKey],
   queryFn: async () => {
-    const response = await axios.get<ReviewRotData>(DATA_URL);
+    const response = await axios.get<ReviewRotData>("/api/pull-requests");
     return response.data;
   },
-  staleTime: 5 * 60 * 1000,
 });
 
 export const useFetchPullRequests = () => {
@@ -30,4 +33,22 @@ export const useFetchPullRequests = () => {
     isFetching,
     fetchError: isError ? error : null,
   };
+};
+
+export const useRefreshData = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const response = await axios.post<{ status: string }>(
+        "/api/pull-requests/refresh",
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: pullRequestsQueryOptions.queryKey,
+      });
+    },
+  });
 };

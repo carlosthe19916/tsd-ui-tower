@@ -12,7 +12,8 @@ import {
   brandingStrings,
   encodeEnv,
 } from "@tsd-ui-tower/common";
-import { proxyMap } from "./proxies";
+import { proxyMap } from "./proxies.js";
+import { createPullRequestsRouter } from "./routes/pull-requests.js";
 
 const debugMode = process.env.DEBUG === "1";
 if (debugMode) console.log("CONSOLE_ENV", CONSOLE_ENV);
@@ -24,6 +25,8 @@ const port = CONSOLE_ENV.PORT ? Number.parseInt(CONSOLE_ENV.PORT, 10) : 8080;
 
 const app = express();
 app.set("x-powered-by", false);
+
+app.use("/api/pull-requests", createPullRequestsRouter());
 
 // Setup proxy handling
 for (const proxyPath in proxyMap) {
@@ -63,7 +66,7 @@ const server = app.listen(port, (error) => {
 // Handle shutdown signals Ctrl-C (SIGINT) and default podman/docker stop (SIGTERM)
 const httpTerminator = createHttpTerminator({ server });
 
-const shutdown = async (signal) => {
+const shutdown = async (signal: string) => {
   if (!server) {
     console.log(`${signal}, no server running.`);
     return;

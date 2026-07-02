@@ -13,7 +13,11 @@ const DEFAULT_UI: UIConfig = {
 };
 
 export function loadConfig(dir: string): Config {
-  const sourcesPath = path.join(dir, "sources.yaml");
+  const localPath = path.join(dir, "sources.local.yaml");
+  const sourcesPath = path.join(
+    dir,
+    existsSync(localPath) ? "sources.local.yaml" : "sources.yaml",
+  );
   const sourcesRaw = readFileSync(sourcesPath, "utf8");
   const sources = parse(sourcesRaw) as Record<string, unknown>;
 

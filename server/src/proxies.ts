@@ -1,3 +1,5 @@
+import type { Options } from "http-proxy-middleware";
+
 import { CONSOLE_ENV } from "@tsd-ui-tower/common";
 
 const logger =
@@ -9,7 +11,7 @@ const logger =
         error: console.error,
       };
 
-export const proxyMap = {
+export const proxyMap: Record<string, Options> = {
   api: {
     pathFilter: "/api",
     target: CONSOLE_ENV.API_URL ?? "http://localhost:8080",

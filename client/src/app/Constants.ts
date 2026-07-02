@@ -1,5 +1,3 @@
-export const DATA_URL = "data.json";
-
 export const Paths = {
   pullRequests: "/",
 } as const;
