@@ -38,6 +38,7 @@ export const PullRequestProvider: React.FC<PullRequestProviderProps> = ({
     setReadyForReview,
     searchTerm,
     setSearchTerm,
+    clearAllFilters,
     filterPRs,
   } = usePRFilters();
 
@@ -135,6 +136,7 @@ export const PullRequestProvider: React.FC<PullRequestProviderProps> = ({
         setReadyForReview,
         searchTerm,
         setSearchTerm,
+        clearAllFilters,
         uniqueAuthors,
         uniqueRepos,
         averageAgeDays,

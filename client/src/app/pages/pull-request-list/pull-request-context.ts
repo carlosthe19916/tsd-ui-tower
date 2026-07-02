@@ -24,6 +24,7 @@ export interface IPullRequestListContext {
   setReadyForReview: (value: boolean) => void;
   searchTerm: string;
   setSearchTerm: (value: string) => void;
+  clearAllFilters: () => void;
 
   uniqueAuthors: string[];
   uniqueRepos: string[];

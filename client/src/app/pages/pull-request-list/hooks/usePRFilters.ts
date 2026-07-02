@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 
 import type { PullRequest } from "@app/api/models";
 import { PR_TYPE_FILTERS, type PRTypeFilter } from "@app/Constants";
-import { useUrlParam } from "@app/hooks/useUrlParams";
+import { useClearUrlParams, useUrlParam } from "@app/hooks/useUrlParams";
 import { isReadyForReview, isWIP } from "@app/utils/pr-utils";
 
 export const usePRFilters = () => {
@@ -19,6 +19,14 @@ export const usePRFilters = () => {
   const setReadyForReview = useCallback(
     (value: boolean) => setReadyParam(value ? "true" : ""),
     [setReadyParam],
+  );
+
+  const clearAllFilters = useClearUrlParams(
+    "type",
+    "author",
+    "repo",
+    "ready",
+    "search",
   );
 
   const filterPRs = useCallback(
@@ -62,6 +70,7 @@ export const usePRFilters = () => {
     setReadyForReview,
     searchTerm,
     setSearchTerm,
+    clearAllFilters,
     filterPRs,
   };
 };

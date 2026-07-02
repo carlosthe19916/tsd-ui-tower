@@ -27,3 +27,18 @@ export const useUrlParam = (key: string, defaultValue: string) => {
 
   return [value, setValue] as const;
 };
+
+export const useClearUrlParams = (...keys: string[]) => {
+  const [, setSearchParams] = useSearchParams();
+
+  return useCallback(() => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        keys.forEach((key) => next.delete(key));
+        return next;
+      },
+      { replace: true },
+    );
+  }, [keys, setSearchParams]);
+};
