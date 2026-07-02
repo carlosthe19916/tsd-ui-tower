@@ -22,6 +22,8 @@ export interface IPullRequestListContext {
   setRepoFilter: (value: string) => void;
   readyForReview: boolean;
   setReadyForReview: (value: boolean) => void;
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
 
   uniqueAuthors: string[];
   uniqueRepos: string[];

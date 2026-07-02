@@ -13,6 +13,7 @@ export const usePRFilters = () => {
   const [authorFilter, setAuthorFilter] = useUrlParam("author", "");
   const [repoFilter, setRepoFilter] = useUrlParam("repo", "");
   const [readyParam, setReadyParam] = useUrlParam("ready", "");
+  const [searchTerm, setSearchTerm] = useUrlParam("search", "");
 
   const readyForReview = readyParam === "true";
   const setReadyForReview = useCallback(
@@ -35,10 +36,19 @@ export const usePRFilters = () => {
         if (repoFilter && pr.repo !== repoFilter) return false;
         if (readyForReview && !isReadyForReview(pr)) return false;
 
+        if (searchTerm) {
+          const term = searchTerm.toLowerCase();
+          const matches =
+            pr.title.toLowerCase().includes(term) ||
+            pr.repo.toLowerCase().includes(term) ||
+            pr.author.login.toLowerCase().includes(term);
+          if (!matches) return false;
+        }
+
         return true;
       });
     },
-    [typeFilter, authorFilter, repoFilter, readyForReview],
+    [typeFilter, authorFilter, repoFilter, readyForReview, searchTerm],
   );
 
   return {
@@ -50,6 +60,8 @@ export const usePRFilters = () => {
     setRepoFilter,
     readyForReview,
     setReadyForReview,
+    searchTerm,
+    setSearchTerm,
     filterPRs,
   };
 };

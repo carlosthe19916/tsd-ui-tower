@@ -4,6 +4,7 @@ import {
   Button,
   Checkbox,
   MenuToggle,
+  SearchInput,
   Select,
   SelectList,
   SelectOption,
@@ -39,6 +40,8 @@ export const PullRequestToolbar: React.FC = () => {
     setRepoFilter,
     readyForReview,
     setReadyForReview,
+    searchTerm,
+    setSearchTerm,
     uniqueAuthors,
     uniqueRepos,
     paginationProps,
@@ -53,6 +56,15 @@ export const PullRequestToolbar: React.FC = () => {
     <Toolbar>
       <ToolbarContent>
         <ToolbarItem>
+          <SearchInput
+            placeholder="Search pull requests"
+            value={searchTerm}
+            onChange={(_event, value) => setSearchTerm(value)}
+            onClear={() => setSearchTerm("")}
+          />
+        </ToolbarItem>
+
+        <ToolbarItem>
           <Button
             variant="primary"
             icon={<SyncAltIcon />}
@@ -64,7 +76,7 @@ export const PullRequestToolbar: React.FC = () => {
           </Button>
         </ToolbarItem>
 
-        <ToolbarItem>
+        <ToolbarItem alignSelf="center">
           <Checkbox
             id="ready-for-review"
             label="Ready for review"
