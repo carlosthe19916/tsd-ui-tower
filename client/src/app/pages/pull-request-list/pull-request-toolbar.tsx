@@ -13,9 +13,11 @@ import {
   ToolbarFilter,
   ToolbarGroup,
   ToolbarItem,
+  ToolbarToggleGroup,
   ToggleGroup,
   ToggleGroupItem,
 } from "@patternfly/react-core";
+import FilterIcon from "@patternfly/react-icons/dist/esm/icons/filter-icon";
 import SyncAltIcon from "@patternfly/react-icons/dist/esm/icons/sync-alt-icon";
 
 import { SimplePagination } from "@app/components/SimplePagination";
@@ -55,23 +57,143 @@ export const PullRequestToolbar: React.FC = () => {
   const [isRepoOpen, setIsRepoOpen] = useState(false);
 
   return (
-    <Toolbar clearAllFilters={clearAllFilters}>
+    <Toolbar
+      clearAllFilters={clearAllFilters}
+      collapseListedFiltersBreakpoint="xl"
+      className="pf-m-toggle-group-container"
+    >
       <ToolbarContent>
-        <ToolbarItem>
-          <ToolbarFilter
-            labels={searchTerm ? [searchTerm] : []}
-            deleteLabel={() => setSearchTerm("")}
-            deleteLabelGroup={() => setSearchTerm("")}
-            categoryName="Search"
-          >
-            <SearchInput
-              placeholder="Search pull requests"
-              value={searchTerm}
-              onChange={(_event, value) => setSearchTerm(value)}
-              onClear={() => setSearchTerm("")}
-            />
-          </ToolbarFilter>
-        </ToolbarItem>
+        <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
+          <ToolbarItem>
+            <ToolbarFilter
+              labels={searchTerm ? [searchTerm] : []}
+              deleteLabel={() => setSearchTerm("")}
+              deleteLabelGroup={() => setSearchTerm("")}
+              categoryName="Search"
+            >
+              <SearchInput
+                placeholder="Search pull requests"
+                value={searchTerm}
+                onChange={(_event, value) => setSearchTerm(value)}
+                onClear={() => setSearchTerm("")}
+              />
+            </ToolbarFilter>
+          </ToolbarItem>
+
+          <ToolbarItem alignSelf="center">
+            <ToolbarFilter
+              labels={readyForReview ? ["Ready for review"] : []}
+              deleteLabel={() => setReadyForReview(false)}
+              deleteLabelGroup={() => setReadyForReview(false)}
+              categoryName="Status"
+            >
+              <Checkbox
+                id="ready-for-review"
+                label="Ready for review"
+                isChecked={readyForReview}
+                onChange={(_event, checked) => setReadyForReview(checked)}
+              />
+            </ToolbarFilter>
+          </ToolbarItem>
+
+          <ToolbarGroup variant="filter-group">
+            <ToolbarFilter
+              labels={
+                typeFilter !== PR_TYPE_FILTERS.REGULAR &&
+                typeFilter !== PR_TYPE_FILTERS.ALL
+                  ? [TYPE_LABELS[typeFilter]]
+                  : []
+              }
+              deleteLabel={() => setTypeFilter(PR_TYPE_FILTERS.ALL)}
+              deleteLabelGroup={() => setTypeFilter(PR_TYPE_FILTERS.ALL)}
+              categoryName="Type"
+            >
+              <ToggleGroup aria-label="PR type filter">
+                {Object.entries(TYPE_LABELS).map(([value, label]) => (
+                  <ToggleGroupItem
+                    key={value}
+                    text={label}
+                    buttonId={`type-${value}`}
+                    isSelected={typeFilter === value}
+                    onChange={() => setTypeFilter(value)}
+                  />
+                ))}
+              </ToggleGroup>
+            </ToolbarFilter>
+
+            <ToolbarFilter
+              labels={authorFilter ? [authorFilter] : []}
+              deleteLabel={() => setAuthorFilter("")}
+              deleteLabelGroup={() => setAuthorFilter("")}
+              categoryName="Author"
+            >
+              <Select
+                isOpen={isAuthorOpen}
+                onSelect={(_event, value) => {
+                  setAuthorFilter(value === "__all__" ? "" : (value as string));
+                  setIsAuthorOpen(false);
+                }}
+                onOpenChange={setIsAuthorOpen}
+                selected={authorFilter || "__all__"}
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
+                    onClick={() => setIsAuthorOpen(!isAuthorOpen)}
+                    isExpanded={isAuthorOpen}
+                    style={{ minWidth: "180px" }}
+                  >
+                    {authorFilter || "All authors"}
+                  </MenuToggle>
+                )}
+              >
+                <SelectList>
+                  <SelectOption value="__all__">All authors</SelectOption>
+                  {uniqueAuthors.map((author) => (
+                    <SelectOption key={author} value={author}>
+                      {author}
+                    </SelectOption>
+                  ))}
+                </SelectList>
+              </Select>
+            </ToolbarFilter>
+
+            <ToolbarFilter
+              labels={repoFilter ? [repoFilter] : []}
+              deleteLabel={() => setRepoFilter("")}
+              deleteLabelGroup={() => setRepoFilter("")}
+              categoryName="Repository"
+            >
+              <Select
+                isOpen={isRepoOpen}
+                onSelect={(_event, value) => {
+                  setRepoFilter(value === "__all__" ? "" : (value as string));
+                  setIsRepoOpen(false);
+                }}
+                onOpenChange={setIsRepoOpen}
+                selected={repoFilter || "__all__"}
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
+                    onClick={() => setIsRepoOpen(!isRepoOpen)}
+                    isExpanded={isRepoOpen}
+                    style={{ minWidth: "200px" }}
+                  >
+                    {repoFilter || "All repos"}
+                  </MenuToggle>
+                )}
+              >
+                <SelectList>
+                  <SelectOption value="__all__">All repos</SelectOption>
+                  {uniqueRepos.map((repo) => (
+                    <SelectOption key={repo} value={repo}>
+                      {repo}
+                    </SelectOption>
+                  ))}
+                </SelectList>
+              </Select>
+            </ToolbarFilter>
+          </ToolbarGroup>
+        </ToolbarToggleGroup>
 
         <ToolbarItem>
           <Button
@@ -84,120 +206,6 @@ export const PullRequestToolbar: React.FC = () => {
             Refresh
           </Button>
         </ToolbarItem>
-
-        <ToolbarItem alignSelf="center">
-          <ToolbarFilter
-            labels={readyForReview ? ["Ready for review"] : []}
-            deleteLabel={() => setReadyForReview(false)}
-            deleteLabelGroup={() => setReadyForReview(false)}
-            categoryName="Status"
-          >
-            <Checkbox
-              id="ready-for-review"
-              label="Ready for review"
-              isChecked={readyForReview}
-              onChange={(_event, checked) => setReadyForReview(checked)}
-            />
-          </ToolbarFilter>
-        </ToolbarItem>
-
-        <ToolbarGroup variant="filter-group">
-          <ToolbarFilter
-            labels={
-              typeFilter !== PR_TYPE_FILTERS.REGULAR &&
-              typeFilter !== PR_TYPE_FILTERS.ALL
-                ? [TYPE_LABELS[typeFilter]]
-                : []
-            }
-            deleteLabel={() => setTypeFilter(PR_TYPE_FILTERS.ALL)}
-            deleteLabelGroup={() => setTypeFilter(PR_TYPE_FILTERS.ALL)}
-            categoryName="Type"
-          >
-            <ToggleGroup aria-label="PR type filter">
-              {Object.entries(TYPE_LABELS).map(([value, label]) => (
-                <ToggleGroupItem
-                  key={value}
-                  text={label}
-                  buttonId={`type-${value}`}
-                  isSelected={typeFilter === value}
-                  onChange={() => setTypeFilter(value)}
-                />
-              ))}
-            </ToggleGroup>
-          </ToolbarFilter>
-
-          <ToolbarFilter
-            labels={authorFilter ? [authorFilter] : []}
-            deleteLabel={() => setAuthorFilter("")}
-            deleteLabelGroup={() => setAuthorFilter("")}
-            categoryName="Author"
-          >
-            <Select
-              isOpen={isAuthorOpen}
-              onSelect={(_event, value) => {
-                setAuthorFilter(value === "__all__" ? "" : (value as string));
-                setIsAuthorOpen(false);
-              }}
-              onOpenChange={setIsAuthorOpen}
-              selected={authorFilter || "__all__"}
-              toggle={(toggleRef) => (
-                <MenuToggle
-                  ref={toggleRef}
-                  onClick={() => setIsAuthorOpen(!isAuthorOpen)}
-                  isExpanded={isAuthorOpen}
-                  style={{ minWidth: "180px" }}
-                >
-                  {authorFilter || "All authors"}
-                </MenuToggle>
-              )}
-            >
-              <SelectList>
-                <SelectOption value="__all__">All authors</SelectOption>
-                {uniqueAuthors.map((author) => (
-                  <SelectOption key={author} value={author}>
-                    {author}
-                  </SelectOption>
-                ))}
-              </SelectList>
-            </Select>
-          </ToolbarFilter>
-
-          <ToolbarFilter
-            labels={repoFilter ? [repoFilter] : []}
-            deleteLabel={() => setRepoFilter("")}
-            deleteLabelGroup={() => setRepoFilter("")}
-            categoryName="Repository"
-          >
-            <Select
-              isOpen={isRepoOpen}
-              onSelect={(_event, value) => {
-                setRepoFilter(value === "__all__" ? "" : (value as string));
-                setIsRepoOpen(false);
-              }}
-              onOpenChange={setIsRepoOpen}
-              selected={repoFilter || "__all__"}
-              toggle={(toggleRef) => (
-                <MenuToggle
-                  ref={toggleRef}
-                  onClick={() => setIsRepoOpen(!isRepoOpen)}
-                  isExpanded={isRepoOpen}
-                  style={{ minWidth: "200px" }}
-                >
-                  {repoFilter || "All repos"}
-                </MenuToggle>
-              )}
-            >
-              <SelectList>
-                <SelectOption value="__all__">All repos</SelectOption>
-                {uniqueRepos.map((repo) => (
-                  <SelectOption key={repo} value={repo}>
-                    {repo}
-                  </SelectOption>
-                ))}
-              </SelectList>
-            </Select>
-          </ToolbarFilter>
-        </ToolbarGroup>
 
         <ToolbarItem variant="pagination" align={{ default: "alignEnd" }}>
           <SimplePagination
