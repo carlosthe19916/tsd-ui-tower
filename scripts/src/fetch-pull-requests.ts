@@ -22,6 +22,7 @@ interface PRNode {
   updatedAt: string;
   isDraft: boolean;
   headRefOid: string;
+  reviewDecision: string | null;
   author: {
     __typename: string;
     login: string;
@@ -64,6 +65,7 @@ const PR_QUERY = `
           updatedAt
           isDraft
           headRefOid
+          reviewDecision
           author {
             __typename
             login
@@ -162,6 +164,7 @@ function transformPR(node: PRNode, repo: string): PullRequest {
     ci_status: extractCIStatus(node),
     size: extractSize(node),
     reviews: extractReviews(node),
+    review_decision: node.reviewDecision ?? null,
     unresolved_conversations: countUnresolved(node),
     labels: node.labels.nodes.map((l) => l.name),
   };

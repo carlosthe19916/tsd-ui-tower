@@ -26,6 +26,13 @@ import { useRefreshData } from "@app/queries/pull-requests";
 
 import { PullRequestListContext } from "./pull-request-context";
 
+const APPROVAL_LABELS: Record<string, string> = {
+  APPROVED: "Approved",
+  CHANGES_REQUESTED: "Changes requested",
+  REVIEW_REQUIRED: "Review required",
+  pending: "Pending",
+};
+
 const TYPE_LABELS: Record<string, string> = {
   [PR_TYPE_FILTERS.REGULAR]: "Regular",
   [PR_TYPE_FILTERS.AUTOMATED]: "Automated",
@@ -45,6 +52,8 @@ export const PullRequestToolbar: React.FC = () => {
     setReadyForReview,
     searchTerm,
     setSearchTerm,
+    approvalFilter,
+    setApprovalFilter,
     clearAllFilters,
     uniqueAuthors,
     uniqueRepos,
@@ -55,6 +64,7 @@ export const PullRequestToolbar: React.FC = () => {
 
   const [isAuthorOpen, setIsAuthorOpen] = useState(false);
   const [isRepoOpen, setIsRepoOpen] = useState(false);
+  const [isApprovalOpen, setIsApprovalOpen] = useState(false);
 
   return (
     <Toolbar
@@ -189,6 +199,53 @@ export const PullRequestToolbar: React.FC = () => {
                       {repo}
                     </SelectOption>
                   ))}
+                </SelectList>
+              </Select>
+            </ToolbarFilter>
+
+            <ToolbarFilter
+              labels={
+                approvalFilter
+                  ? [APPROVAL_LABELS[approvalFilter] ?? approvalFilter]
+                  : []
+              }
+              deleteLabel={() => setApprovalFilter("")}
+              deleteLabelGroup={() => setApprovalFilter("")}
+              categoryName="Approval"
+            >
+              <Select
+                isOpen={isApprovalOpen}
+                onSelect={(_event, value) => {
+                  setApprovalFilter(
+                    value === "__all__" ? "" : (value as string),
+                  );
+                  setIsApprovalOpen(false);
+                }}
+                onOpenChange={setIsApprovalOpen}
+                selected={approvalFilter || "__all__"}
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
+                    onClick={() => setIsApprovalOpen(!isApprovalOpen)}
+                    isExpanded={isApprovalOpen}
+                    style={{ minWidth: "200px" }}
+                  >
+                    {approvalFilter
+                      ? (APPROVAL_LABELS[approvalFilter] ?? approvalFilter)
+                      : "All approvals"}
+                  </MenuToggle>
+                )}
+              >
+                <SelectList>
+                  <SelectOption value="__all__">All approvals</SelectOption>
+                  <SelectOption value="APPROVED">Approved</SelectOption>
+                  <SelectOption value="CHANGES_REQUESTED">
+                    Changes requested
+                  </SelectOption>
+                  <SelectOption value="REVIEW_REQUIRED">
+                    Review required
+                  </SelectOption>
+                  <SelectOption value="pending">Pending</SelectOption>
                 </SelectList>
               </Select>
             </ToolbarFilter>

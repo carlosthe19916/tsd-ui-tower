@@ -32,6 +32,7 @@ export interface PullRequest {
   ci_status: string | null;
   size: string | null;
   reviews: Reviews;
+  review_decision: string | null;
   unresolved_conversations: number;
   labels: string[];
 }

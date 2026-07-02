@@ -14,6 +14,7 @@ export const usePRFilters = () => {
   const [repoFilter, setRepoFilter] = useUrlParam("repo", "");
   const [readyParam, setReadyParam] = useUrlParam("ready", "");
   const [searchTerm, setSearchTerm] = useUrlParam("search", "");
+  const [approvalFilter, setApprovalFilter] = useUrlParam("approval", "");
 
   const readyForReview = readyParam === "true";
   const setReadyForReview = useCallback(
@@ -27,6 +28,7 @@ export const usePRFilters = () => {
     "repo",
     "ready",
     "search",
+    "approval",
   );
 
   const filterPRs = useCallback(
@@ -53,10 +55,25 @@ export const usePRFilters = () => {
           if (!matches) return false;
         }
 
+        if (approvalFilter) {
+          if (approvalFilter === "pending") {
+            if (pr.review_decision !== null) return false;
+          } else {
+            if (pr.review_decision !== approvalFilter) return false;
+          }
+        }
+
         return true;
       });
     },
-    [typeFilter, authorFilter, repoFilter, readyForReview, searchTerm],
+    [
+      typeFilter,
+      authorFilter,
+      repoFilter,
+      readyForReview,
+      searchTerm,
+      approvalFilter,
+    ],
   );
 
   return {
@@ -70,6 +87,8 @@ export const usePRFilters = () => {
     setReadyForReview,
     searchTerm,
     setSearchTerm,
+    approvalFilter,
+    setApprovalFilter,
     clearAllFilters,
     filterPRs,
   };

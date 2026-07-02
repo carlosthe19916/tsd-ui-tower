@@ -14,6 +14,7 @@ import { CIStatusIcon } from "./components/CIStatusIcon";
 import { SizeBadge } from "./components/SizeBadge";
 import { AgeDisplay } from "./components/AgeDisplay";
 import { AuthorCell } from "./components/AuthorCell";
+import { ApprovalStatusLabel } from "./components/ApprovalStatusLabel";
 import { extractSize } from "@app/utils/pr-utils";
 
 const columnHelper = createColumnHelper<PullRequest>();
@@ -22,7 +23,7 @@ export const columns = [
   columnHelper.display({
     id: "pr",
     header: "PR",
-    meta: { width: 40, dataLabel: "PR" },
+    meta: { width: 30, dataLabel: "PR" },
     enableSorting: false,
     cell: ({ row }) => {
       const pr = row.original;
@@ -84,7 +85,7 @@ export const columns = [
 
   columnHelper.accessor("ci_status", {
     header: "CI",
-    meta: { width: 10, dataLabel: "CI" },
+    meta: { width: 5, dataLabel: "CI" },
     enableSorting: false,
     cell: ({ getValue }) => <CIStatusIcon status={getValue()} />,
   }),
@@ -120,24 +121,36 @@ export const columns = [
     },
   }),
 
-  columnHelper.accessor((row) => row.reviews.count, {
-    id: "reviews",
-    header: "Reviews",
+  columnHelper.accessor("review_decision", {
+    id: "approval",
+    header: "Approval",
     meta: {
-      width: 10,
-      dataLabel: "Reviews",
-      tooltip: "Number of human reviews submitted",
+      width: 15,
+      dataLabel: "Approval",
+      tooltip: "Overall review decision from GitHub",
+    },
+    cell: ({ row }) => (
+      <ApprovalStatusLabel
+        decision={row.original.review_decision}
+        reviewCount={row.original.reviews.count}
+      />
+    ),
+    sortingFn: (rowA, rowB) => {
+      const order: Record<string, number> = {
+        APPROVED: 3,
+        CHANGES_REQUESTED: 2,
+        REVIEW_REQUIRED: 1,
+      };
+      const a = order[rowA.original.review_decision ?? ""] ?? 0;
+      const b = order[rowB.original.review_decision ?? ""] ?? 0;
+      return a - b;
     },
   }),
 
   columnHelper.display({
     id: "unreviewed",
     header: "Unreviewed",
-    meta: {
-      width: 10,
-      dataLabel: "Unreviewed",
-      tooltip: "Indicates new commits since the last review",
-    },
+    meta: { width: 15, dataLabel: "Unreviewed" },
     enableSorting: false,
     cell: ({ row }) => {
       const pr = row.original;

@@ -1,5 +1,8 @@
 export type CIStatus = "SUCCESS" | "FAILURE" | "PENDING" | "ERROR" | null;
 
+export type ReviewDecision =
+  "APPROVED" | "CHANGES_REQUESTED" | "REVIEW_REQUIRED" | null;
+
 export interface Author {
   login: string;
   avatar_url: string;
@@ -23,6 +26,7 @@ export interface PullRequest {
   ci_status: CIStatus;
   size: string | null;
   reviews: Reviews;
+  review_decision: ReviewDecision;
   unresolved_conversations: number;
   labels: string[];
 }
