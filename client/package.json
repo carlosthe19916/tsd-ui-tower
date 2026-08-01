@@ -36,7 +36,7 @@
     "react-error-boundary": "^6.1.2",
     "react-hook-form": "^7.66.1",
     "react-oidc-context": "^3.3.0",
-    "react-router-dom": "^7.18.1",
+    "react-router-dom": "^7.18.2",
     "tsd-ui": "github:tsd-ui/tsd-ui#v0.3.2",
     "usehooks-ts": "^3.1.1",
     "yup": "^1.7.1"
