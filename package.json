@@ -62,7 +62,7 @@
     "@rollup/plugin-virtual": "^3.0.2",
     "@tanstack/eslint-plugin-query": "^5.101.2",
     "@types/node": "^26.1.0",
-    "@vitest/coverage-v8": "^4.0.0",
+    "@vitest/coverage-v8": "^4.1.10",
     "concurrently": "^10.0.3",
     "copyfiles": "^2.4.1",
     "cross-env": "^10.0.0",
